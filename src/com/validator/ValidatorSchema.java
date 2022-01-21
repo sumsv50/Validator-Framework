@@ -14,7 +14,8 @@ import java.util.Map;
 
 public class ValidatorSchema {
 	private Notification noti;
-    private Map<String, Validator> validators = new HashMap<String, Validator>();
+    private Map<String, Validator> validators = new HashMap<>();
+
     ValidatorSchema(Notification notification)
 	{
 		this.noti = notification;
@@ -34,18 +35,15 @@ public class ValidatorSchema {
 
     //Validate for map
     boolean validate(MyObject obj) {
-        List<ValidatorError> errors = new ArrayList<>();
         List<String> attrNameList = obj.getAllAttributeName();
         for(String key : attrNameList) {
             if(validators.containsKey(key)) {
-                String message = validators.get(key).validate(obj.getAt(key));
+                Object value = obj.getAt(key);
+                String message = validators.get(key).validate(value);
 
                 //Neu co loi thong bao
                 if(!message.isEmpty()) {
-                	ValidatorError temp = new ValidatorError(key, message);
-                    errors.add(temp);
-//                    System.out.println(new ValidatorError(key, message));
-                    noti.notify("ERROR", temp.toString());
+                    noti.notify(key, message);
                 }
             }
         }

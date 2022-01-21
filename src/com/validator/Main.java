@@ -35,14 +35,20 @@ public class Main {
         studentA.putAt("email", "sumsvprogmail.com" );
         studentA.putAt("age", 20);
 
-        Notification notiWindow = new WindowNotification();
+        // Notification notiWindow = new WindowNotification();
         Notification notiConsole = new ConsoleNotification();
-        ValidatorSchema schema1 = new ValidatorSchema(notiWindow);
+        ValidatorSchema schema1 = new ValidatorSchema(notiConsole);
 
         schema1.addRule(
             "email",
             new StringValidator(),
             Arrays.asList(new Required(), new IsEmail())
+        );
+
+        schema1.addRule(
+            "age",
+            new NumericValidator(),
+            Arrays.asList(new Required(),new Min(21))
         );
 
         schema1.validate(studentA);
@@ -53,14 +59,14 @@ public class Main {
         
         //Validate depend on object
 
-        ValidatorSchema schema2 = new ValidatorSchema(notiWindow);
-        Student student = new Student(
-           "NguyenVanA",
-           "a@gmail.com",
-           "0986059068",
-           20,
-           12
-        );
+        // ValidatorSchema schema2 = new ValidatorSchema(notiWindow);
+        // Student student = new Student(
+        //    "NguyenVanA",
+        //    "a@gmail.com",
+        //    "0986059068",
+        //    20,
+        //    12
+        // );
 //        schema2.validate(student);
     }
 }
