@@ -44,7 +44,7 @@ public class MyObject {
         if(objects.containsKey(strObjName)) {
             return objects.get(strObjName);
         }
-        return null;
+        return new MyObject();
     }
 
     private static void loadCommonObjectFromFile() {
