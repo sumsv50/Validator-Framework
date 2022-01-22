@@ -31,11 +31,14 @@ public class Main {
 //            }
 //        };
 
+        //load schema from file
+        ValidatorSchema schemaLoadedFromFile = ValidatorSchema.loadSchemaFromFile("D:\\Java\\Validator-Framework\\src\\com\\validator\\schemaStructure.json");
         MyObject studentA = new MyObject();
         studentA.putAt("email", "sumsvprogmail.com" );
-        studentA.putAt("age", 20);
+        studentA.putAt("age", 19);
+        schemaLoadedFromFile.validate(studentA);
 
-        // Notification notiWindow = new WindowNotification();
+        // add schema by code
         Notification notiConsole = new ConsoleNotification();
         ValidatorSchema schema1 = new ValidatorSchema(notiConsole);
 
@@ -50,7 +53,6 @@ public class Main {
             new NumericValidator(),
             Arrays.asList(new Required(),new Min(21))
         );
-
         schema1.validate(studentA);
 
 

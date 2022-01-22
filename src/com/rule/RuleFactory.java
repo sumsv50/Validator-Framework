@@ -51,8 +51,7 @@ public class RuleFactory {
                 com.annotation.Range range = field.getAnnotation(com.annotation.Range.class);
                 return new Range(range.lowerBound(), range.upperBound());
             case "CustomPattern":
-                com.annotation.CustomPattern pattern =
-                        field.getAnnotation(com.annotation.CustomPattern.class);
+                com.annotation.CustomPattern pattern = field.getAnnotation(com.annotation.CustomPattern.class);
                 return new CustomPattern(pattern.regex(), pattern.flags());
             case "IsEmail":
                 return new IsEmail();
@@ -72,5 +71,34 @@ public class RuleFactory {
                 return new IsNegative();
         }
         return null;
+    }
+
+    public Rule getRule(String name, String[] params) {
+        switch (name.toLowerCase()) {
+            case "require":
+                return new Required();
+            case "isemail":
+                return new IsEmail();
+            case "min": {
+                int lowerBound = Integer.parseInt(params[0]);
+                return new Min(lowerBound);
+            }
+            case "max": {
+                int upperBound = Integer.parseInt(params[0]);
+                return new Max(upperBound);
+            }
+            case "range": {
+                int lowerBound = Integer.parseInt(params[0]);
+                int upperBound = Integer.parseInt(params[1]);
+                return new Range(lowerBound, upperBound);
+            }
+            case "regex": {
+                String pattern = params[0];
+                return new CustomPattern(pattern);
+            }
+            
+            default:
+                return null;
+        }
     }
 }

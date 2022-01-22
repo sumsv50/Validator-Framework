@@ -1,0 +1,21 @@
+{
+    "notification": "console",
+    "schema": {
+        "email": {
+            "type": "String",
+            "rules": {
+                "require": [],
+                "isEmail": []
+            }
+        },
+        "age": {
+            "type": "numeric",
+            "rules": {
+                "require": [],
+                "range": [
+                    "20","21"
+                ]
+            }
+        }
+    }
+}

@@ -13,13 +13,12 @@ public class ValidatorFactory {
         return instance;
     }
 
-    public Validator getValidator(Class type) {
-      switch (type.getSimpleName()) {
+    public Validator getValidator(String type) {
+      switch (type) {
           case "String":
               return new StringValidator();
           default:
               return new NumericValidator();
       }
     }
-
 }

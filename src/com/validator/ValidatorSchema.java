@@ -1,10 +1,17 @@
 package com.validator;
 
 import com.myObject.MyObject;
+import com.notification.ConsoleNotification;
 import com.notification.Notification;
+import com.notification.NotificationFactory;
 import com.rule.Rule;
 import com.rule.RuleFactory;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import java.io.FileReader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -60,7 +67,7 @@ public class ValidatorSchema {
             String name = field.getName(); //Lay ten cua thuoc tinh day
 
             //Dua vao type cua thuoc tinh khoi tao ra dung loai validator de su dung
-            Validator validator = ValidatorFactory.getInstance().getValidator(type);
+            Validator validator = ValidatorFactory.getInstance().getValidator(type.getSimpleName());
 
             //Duyet qua cac annotation cua thuoc tinh hien tai
             //Va them cac loai rule tuong ung voi annotation
@@ -83,5 +90,50 @@ public class ValidatorSchema {
 
         }
         return true;
+    }
+
+    public static ValidatorSchema loadSchemaFromFile(String filePath) {
+        JSONParser parser = new JSONParser(); 
+        try {
+            JSONObject object = (JSONObject)parser.parse(new FileReader(filePath));
+
+            String notificationType = (String) object.get("notification");
+            Notification noti = NotificationFactory.getInstance().getNotification(notificationType);
+            ValidatorSchema validatorSchema = new ValidatorSchema(noti);
+
+            JSONObject objectSchema = (JSONObject)object.get("schema");
+            for(Object key: objectSchema.keySet()) {
+                String attrName = (String) key;
+                JSONObject description = (JSONObject) objectSchema.get(key);
+
+                String type = (String) description.get("type");
+                Validator validator =  ValidatorFactory.getInstance().getValidator(type);
+
+                JSONObject objectRules = (JSONObject) description.get("rules");
+
+                List<Rule> rules = new ArrayList<>();
+                for(Object ruleName: objectRules.keySet()) {
+                    String[] params = toStringArray((JSONArray) objectRules.get(ruleName));
+
+                    Rule rule = RuleFactory.getInstance().getRule((String)ruleName, params);
+                    rules.add(rule);
+                }
+                validatorSchema.addRule(attrName, validator, rules);
+            }
+            
+            return validatorSchema;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ConsoleNotification clgNoti = new ConsoleNotification();
+            clgNoti.notify("JSON schema structure is not valid, please double-check the documentation");
+            return null;
+        }
+    }
+
+    private static String[] toStringArray(JSONArray jsonArray) {
+        if(jsonArray==null)
+            return new String[]{};
+        
+        return jsonArray.toString().replace("[","").replace("]","").replace("\"","").split(",");
     }
 }
