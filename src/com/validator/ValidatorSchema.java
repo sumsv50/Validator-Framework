@@ -126,7 +126,7 @@ public class ValidatorSchema {
             e.printStackTrace();
             ConsoleNotification clgNoti = new ConsoleNotification();
             clgNoti.notify("JSON schema structure is not valid, please double-check the documentation");
-            return null;
+            return new ValidatorSchema(clgNoti);
         }
     }
 

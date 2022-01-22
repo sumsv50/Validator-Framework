@@ -33,9 +33,7 @@ public class Main {
 
         //load schema from file
         ValidatorSchema schemaLoadedFromFile = ValidatorSchema.loadSchemaFromFile("D:\\Java\\Validator-Framework\\src\\com\\validator\\schemaStructure.json");
-        MyObject studentA = new MyObject();
-        studentA.putAt("email", "sumsvprogmail.com" );
-        studentA.putAt("age", 19);
+        MyObject studentA = MyObject.loadObjectFromFile("D:\\Java\\Validator-Framework\\src\\com\\myObject\\studentObject.json");
         schemaLoadedFromFile.validate(studentA);
 
         // add schema by code
@@ -53,7 +51,7 @@ public class Main {
             new NumericValidator(),
             Arrays.asList(new Required(),new Min(21))
         );
-        schema1.validate(studentA);
+        // schema1.validate(studentA);
 
 
         //******************************************************
