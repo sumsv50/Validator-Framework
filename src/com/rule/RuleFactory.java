@@ -8,6 +8,7 @@ import java.util.Map;
 public class RuleFactory {
     private static RuleFactory instance = null;
     private static Map<RuleType, Rule> rules = new HashMap<>();
+    private static Map<String, Rule> customRules = new HashMap<>();
 
     private RuleFactory() {
         initialize();
@@ -21,6 +22,7 @@ public class RuleFactory {
         rules.put(RuleType.IS_EMAIL, new IsEmail());
         rules.put(RuleType.IS_PHONE_NUMBER, new IsPhoneNumber());
     }
+
 
     public static RuleFactory getInstance() {
         if (instance == null) {
@@ -38,7 +40,7 @@ public class RuleFactory {
         return null;
     }
 
-    // Cũng chỉ để lấy được cái rule thôi (Factory)
+    // (Factory)
     public Rule getRule(Field field, Annotation annotation) {
         switch (annotation.annotationType().getSimpleName()) {
             case "Max":
@@ -100,5 +102,20 @@ public class RuleFactory {
             default:
                 return null;
         }
+    }
+
+    public boolean addCustomRule(String ruleName, Rule rule) {
+        if (customRules.containsKey(ruleName)) {
+            return false;
+        }
+        customRules.put(ruleName, rule);
+        return true;
+    }
+
+    public Rule getCustomRule(String ruleName) {
+        if (customRules.containsKey(ruleName)) {
+            return customRules.get(ruleName);
+        }
+        return null;
     }
 }
