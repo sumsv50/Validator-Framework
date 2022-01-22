@@ -1,0 +1,14 @@
+{
+    "Student": {
+        "email": "String",
+        "age": "Numeric"
+    },
+    "Job": {
+        "title": "String",
+        "salary": "Numeric"
+    },
+    "Fraction": {
+        "numerator": "Numeric",
+        "denominator": "Numeric"
+    }
+}

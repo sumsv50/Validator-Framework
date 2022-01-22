@@ -18,23 +18,13 @@ import java.util.Map;
 public class Main {
 
     public static void main(String[] args) throws IllegalAccessException {
-//        Rule rule = new Rule() {
-//            @Override
-//            public String validate(Double value) {
-//                if(value %2 != 0) return "So khong chia het cho 2";
-//                return "";
-//            }
-//
-//            @Override
-//            public String validate(String value) {
-//                return "DMM";
-//            }
-//        };
 
         //load schema from file
-        ValidatorSchema schemaLoadedFromFile = ValidatorSchema.loadSchemaFromFile("D:\\Java\\Validator-Framework\\src\\com\\validator\\schemaStructure.json");
-        MyObject studentA = MyObject.loadObjectFromFile("D:\\Java\\Validator-Framework\\src\\com\\myObject\\studentObject.json");
-        schemaLoadedFromFile.validate(studentA);
+        // ValidatorSchema schemaLoadedFromFile = ValidatorSchema.loadSchemaFromFile("D:\\Java\\Validator-Framework\\src\\com\\validator\\schemaStructure.json");
+        // MyObject studentA = MyObject.loadObjectFromFile("D:\\Java\\Validator-Framework\\src\\com\\myObject\\studentObject.json");
+        // schemaLoadedFromFile.validate(studentA);
+
+        
 
         // add schema by code
         Notification notiConsole = new ConsoleNotification();
@@ -51,7 +41,10 @@ public class Main {
             new NumericValidator(),
             Arrays.asList(new Required(),new Min(21))
         );
-        // schema1.validate(studentA);
+        MyObject studentA = MyObject.getCommonObjectByObjectName("Student");
+        studentA.putAt("email", "sdfs@df@gmail.com");
+        studentA.putAt("age", 12);
+        schema1.validate(studentA);
 
 
         //******************************************************

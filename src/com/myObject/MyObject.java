@@ -15,6 +15,12 @@ import java.util.Map;
 public class MyObject {
     public  Map<String, Object> attributes = new HashMap<String, Object>();
 
+    public static Map<String, MyObject> objects = new HashMap<>();
+
+    static {
+        loadCommonObjectFromFile();
+    }
+
     public Object getAt(String attrName) {
         if (!attributes.containsKey(attrName)) {
             return null;
@@ -32,6 +38,34 @@ public class MyObject {
 
     public List<String> getAllAttributeName() {
         return new ArrayList<String>(attributes.keySet());
+    }
+
+    public static MyObject getCommonObjectByObjectName(String strObjName) {
+        if(objects.containsKey(strObjName)) {
+            return objects.get(strObjName);
+        }
+        return null;
+    }
+
+    private static void loadCommonObjectFromFile() {
+        JSONParser parser = new JSONParser(); 
+        try {
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("D:\\Java\\Validator-Framework\\src\\com\\myObject\\commonObjects.json"));
+            
+            for(Object key: jsonObject.keySet()) {
+                MyObject object = new MyObject();
+                String objectName = (String) key;
+                JSONObject objectInformation = (JSONObject)jsonObject.get(key); 
+                for(Object attrName: objectInformation.keySet()) {
+                    object.putAt((String) attrName, objectInformation.get(attrName));
+                }
+                objects.put(objectName,object);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            ConsoleNotification clgNoti = new ConsoleNotification();
+            clgNoti.notify("Object structure is not valid, please double-check the documentation");
+        }
     }
 
     public static MyObject loadObjectFromFile(String filePath) {
@@ -52,6 +86,5 @@ public class MyObject {
             clgNoti.notify("Object structure is not valid, please double-check the documentation");
             return new MyObject();
         }
-
     }
 }
